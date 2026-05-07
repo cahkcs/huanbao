@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>昆虫博物馆 - 探索昆虫与人类的关系</title>
+    <link rel="icon" href="ing/icu.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2d5016;
+            background: linear-gradient(135deg, #f0f9e8 0%, #e8f5e0 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background: rgba(45, 80, 22, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .nav-links a.active {
+            background: rgba(139, 195, 74, 0.3);
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1b5e20 0%, #388e3c 100%);
+            color: white;
+            padding: 70px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🏛️ 🦋 🐝 📚 🐞 🌿';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 26px;
+            letter-spacing: 25px;
+            opacity: 0.6;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.25em;
+            max-width: 750px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .breadcrumb span {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .breadcrumb a {
+            color: #4a7c23;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .section-icon {
+            font-size: 3em;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            color: #2d5016;
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            color: #666;
+            font-size: 1.08em;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            transition: all 0.3s ease;
+            border-left: 5px solid #4a7c23;
+        }
+
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(74, 124, 35, 0.18);
+        }
+
+        .card-header {
+            padding: 22px 26px;
+            background: linear-gradient(135deg, #f8fdf4 0%, #e8f5e0 100%);
+            border-bottom: 1px solid #e8f5e0;
+        }
+
+        .card-header h3 {
+            color: #2d5016;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 24px 26px;
+        }
+
+        .card-body p {
+            color: #555;
+            font-size: 0.98em;
+            line-height: 1.75;
+            margin-bottom: 16px;
+        }
+
+        .highlight-box {
+            background: #fff8e1;
+            border-left: 4px solid #ffa726;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 0.96em;
+            color: #e65100;
+        }
+
+        .harmful-section {
+            background: linear-gradient(180deg, #fff3e0 0%, #ffffff 100%);
+        }
+
+        .harmful-section .category-card {
+            border-left-color: #ff5722;
+        }
+
+        .beneficial-section {
+            background: linear-gradient(180deg, #f1f8e9 0%, #ffffff 100%);
+        }
+
+        .culture-section {
+            background: linear-gradient(180deg, #e8f5e0 0%, #ffffff 100%);
+        }
+
+        .culture-section .category-card {
+            border-left-color: #7cb342;
+        }
+
+        .info-list {
+            list-style: none;
+            margin-top: 14px;
+        }
+
+        .info-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            color: #555;
+            font-size: 0.96em;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list li::before {
+            content: '•';
+            color: #4a7c23;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .tag {
+            background: #e8f5e0;
+            color: #4a7c23;
+            padding: 5px 13px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .tag.harmful {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .tag.culture {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .stats-banner {
+            background: white;
+            padding: 40px 0;
+            margin: 30px 0;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.2em;
+            color: #4a7c23;
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            color: #777;
+            font-size: 0.98em;
+        }
+
+        footer {
+            background: #1b3a0d;
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        footer p {
+            opacity: 0.88;
+            font-size: 1em;
+        }
+
+        footer .source-link {
+            margin-top: 15px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.88em;
+            opacity: 0.72;
+        }
+
+        footer .source-link a {
+            color: #aed581;
+            text-decoration: none;
+        }
+
+        footer .source-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2em; }
+            header::before { display: none; }
+            .category-grid { grid-template-columns: 1fr; }
+            nav .container { flex-direction: column; gap: 12px; }
+            .nav-links { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="index.html" class="nav-logo">🌿 昆虫与环保</a>
+        <ul class="nav-links">
+            <li><a href="index.html">🏠 首页</a></li>
+            <li><a href="museum.html" class="active">🏛️ 昆虫博物馆</a></li>
+            <li><a href="contribution.html">♻️ 环保贡献</a></li>
+            <li><a href="guestbook.html">💬 留言板</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header>
+    <div class="container">
+        <h1>🏛️ 昆虫博物馆</h1>
+        <p>探索昆虫与人类的千丝万缕关系 —— 从益虫到害虫，从科学到文化，全面了解这些微小生命的非凡世界</p>
+    </div>
+</header>
+
+<div class="breadcrumb">
+    <div class="container">
+        <span><a href="index.html">🏠 首页</a> > 🏛️ 昆虫博物馆</span>
+    </div>
+</div>
+
+<section class="stats-banner">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>100万+</h3>
+                <p>已知昆虫种类</p>
+            </div>
+            <div class="stat-item">
+                <h3>~1%</h3>
+                <p>对人类有害的昆虫</p>
+            </div>
+            <div class="stat-item">
+                <h3>99%+</h3>
+                <p>对人类无害或有益</p>
+            </div>
+            <div class="stat-item">
+                <h3>5000年</h3>
+                <p>人类与昆虫的互动史</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="harmful-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-icon">⚠️</div>
+            <h2 class="section-title">对人类有害的昆虫</h2>
+            <p class="section-desc">虽然绝大多数昆虫对人类无害甚至有益，但少数种类确实给农业、健康和生活带来挑战</p>
+        </div>
+
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🌾 庄稼的大敌</h3>
+                </div>
+                <div class="card-body">
+                    <p>农业害虫是导致全球粮食减产的主要原因之一。据统计，每年因害虫造成的农作物损失高达<strong style="color:#d32f2f">20%-40%</strong>。</p>
+                    <ul class="info-list">
+                        <li><strong>蝗虫</strong>：历史上最严重的农业灾害之一，成群时可覆盖数百平方公里</li>
+                        <li><strong>蚜虫</strong>：吸食植物汁液，传播病毒病，影响作物品质和产量</li>
+                        <li><strong>螟虫</strong>：水稻、玉米等主要粮食作物的重要害虫</li>
+                        <li><strong>棉铃虫</strong>：棉花、蔬菜等经济作物的重大威胁</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag harmful">经济损失</span>
+                        <span class="tag harmful">粮食安全</span>
+                        <span class="tag harmful">防治重点</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🏠 居家生活的大敌</h3>
+                </div>
+                <div class="card-body">
+                    <p>一些昆虫侵入人类居住环境，破坏物品、污染食物，影响生活质量和卫生条件。</p>
+                    <ul class="info-list">
+                        <li><strong>白蚁</strong>：被称为"无牙老虎"，能蛀蚀木材、书籍，造成房屋结构损坏</li>
+                        <li><strong>蟑螂</strong>：适应力极强，携带多种病原体，是家庭卫生的主要威胁</li>
+                        <li><strong>衣鱼/蠹虫</strong>：蛀食衣物、纸张、皮革等有机材料</li>
+                        <li><strong>蚂蚁</strong>：部分种类入侵厨房，污染食物储存</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag harmful">财产损失</span>
+                        <span class="tag harmful">卫生问题</span>
+                        <span class="tag harmful">居家困扰</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🩸 吸血鬼与病魔帮凶</h3>
+                </div>
+                <div class="card-body">
+                    <p>吸血性昆虫不仅直接危害人类和家畜健康，更是多种致命疾病的主要传播媒介。</p>
+                    <ul class="info-list">
+                        <li><strong>蚊子</strong>：传播疟疾、登革热、寨卡病毒等，每年造成<strong style="color:#d32f2f">70多万人死亡</strong></li>
+                        <li><strong>苍蝇</strong>：机械性传播霍乱、伤寒、痢疾等多种肠道传染病</li>
+                        <li><strong>跳蚤</strong>：曾传播鼠疫（黑死病），导致欧洲三分之一人口死亡</li>
+                        <li><strong>蜱虫</strong>：传播莱姆病、发热伴血小板减少综合征等</li>
+                    </ul>
+                    <div class="highlight-box">
+                        💡 提示：通过环境卫生改善、防蚊措施和疫苗接种可有效预防大部分虫媒疾病
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag harmful">公共卫生</span>
+                        <span class="tag harmful">疾病传播</span>
+                        <span class="tag harmful">健康威胁</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="beneficial-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-icon">✨</div>
+            <h2 class="section-title">对人类有益的昆虫</h2>
+            <p class="section-desc">超过99%的昆虫对人类无害或有益，它们在生态、经济、文化和科学领域发挥着不可替代的作用</p>
+        </div>
+
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>💰 昆虫为你添财富</h3>
+                </div>
+                <div class="card-body">
+                    <p>昆虫产业是全球重要的经济来源，涉及食品、医药、纺织等多个领域。</p>
+                    <ul class="info-list">
+                        <li><strong>养蜂业</strong>：中国是世界第一养蜂大国，蜂蜜年产量约45万吨</li>
+                        <li><strong>蚕丝业</strong>：丝绸是中国古代最重要的出口商品之一</li>
+                        <li><strong>昆虫蛋白</strong>：蟋蟀、黄粉虫等高蛋白昆虫食品正在兴起</li>
+                        <li><strong>天然染料</strong>：胭脂虫提取的胭脂红用于食品和化妆品着色</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag">经济价值</span>
+                        <span class="tag">传统产业</span>
+                        <span class="tag">新兴产业</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>💊 治病救人与美味佳肴</h3>
+                </div>
+                <div class="card-body">
+                    <p>昆虫在传统医学和现代营养学中都具有重要地位，既是药材也是美食。</p>
+                    <ul class="info-list">
+                        <li><strong>中医入药</strong>：冬虫夏草、蝉蜕、僵蚕、地龙（蚯蚓）等是名贵中药材</li>
+                        <li><strong>蜂产品</strong>：蜂蜜、蜂王浆、蜂胶具有抗菌、抗氧化功效</li>
+                        <li><strong>食用昆虫</strong>：云南等地有炸竹虫、蜂蛹、蚂蚱等特色美食</li>
+                        <li><strong>营养价值</strong>：昆虫蛋白含量高达60%-80%，富含必需氨基酸</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag">中医药</span>
+                        <span class="tag">营养食品</span>
+                        <span class="tag">保健养生</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🌸 愿为花儿做红娘 & 🌾 庄稼卫士</h3>
+                </div>
+                <div class="card-body">
+                    <p>授粉昆虫是农业生态系统的基础，没有它们，全球粮食安全将面临严重危机。</p>
+                    <ul class="info-list">
+                        <li><strong>蜜蜂授粉</strong>：为全球约75%的粮食作物提供授粉服务，经济价值超数千亿美元</li>
+                        <li><strong>蝴蝶传粉</strong>：长距离飞行帮助植物基因交流和种群扩散</li>
+                        <li><strong>瓢虫治蚜</strong>：一只七星瓢虫一生可捕食5000+只蚜虫</li>
+                        <li><strong>草蛉控虫</strong>：被称为"蚜狮"，是高效的生物防治天敌</li>
+                    </ul>
+                    <div class="highlight-box">
+                        🌍 保护授粉昆虫 = 保护我们的餐桌
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag">授粉服务</span>
+                        <span class="tag">生物防治</span>
+                        <span class="tag">食品安全</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🧹 大自然的清道夫</h3>
+                </div>
+                <div class="card-body">
+                    <p>分解者昆虫是地球清洁系统的核心成员，维持着物质循环和生态平衡。</p>
+                    <ul class="info-list">
+                        <li><strong>蜣螂（屎壳郎）</strong>：澳大利亚引进后成功解决牛粪堆积问题，被誉为"生态工程师"</li>
+                        <li><strong>埋葬甲</strong>：快速分解动物尸体，防止病菌传播</li>
+                        <li><strong>果蝇/腐蝇</strong>：加速腐烂有机物的分解回归土壤</li>
+                        <li><strong>白蚁/蚂蚁</strong>：在热带雨林中分解大量木质纤维</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag">物质循环</span>
+                        <span class="tag">生态平衡</span>
+                        <span class="tag">环境保护</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🔬 科学启示 & 🔍 法医显身手</h3>
+                </div>
+                <div class="card-body">
+                    <p>昆虫为科学研究提供独特模型，法医昆虫学更成为破案的重要工具。</p>
+                    <ul class="info-list">
+                        <li><strong>果蝇研究</strong>：遗传学研究的模式生物，多位诺贝尔奖成果源于此</li>
+                        <li><strong>仿生学灵感</strong>：苍蝇复眼启发相机镜头，蜜蜂舞蹈启发优化算法</li>
+                        <li><strong>法医昆虫学</strong>：根据尸体上昆虫群落推断死亡时间（PMI），协助侦破案件</li>
+                        <li><strong>药物筛选</strong>：昆虫细胞系用于新药研发和毒性测试</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag">科学研究</span>
+                        <span class="tag">仿生技术</span>
+                        <span class="tag">法医学</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🎭 观赏昆虫 & 🌡️ 气象哨兵</h3>
+                </div>
+                <div class="card-body">
+                    <p>昆虫兼具美学价值和实用功能，从自然观察到民间智慧都有其身影。</p>
+                    <ul class="info-list">
+                        <li><strong>蝴蝶观赏</strong>：色彩斑斓的翅膀图案令人叹为观止，推动生态旅游发展</li>
+                        <li><strong>鸣虫文化</strong>：蟋蟀、蝈蝈等在中国有悠久的观赏和斗蟋蟀传统</li>
+                        <li><strong>萤火虫</strong>：夏夜发光奇观，也是生态环境健康的指示物种</li>
+                        <li><strong>物候预报</strong>："蚂蚁搬家要下雨"、"蜻蜓低飞有大风"等民间谚语蕴含气象智慧</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag">观赏价值</span>
+                        <span class="tag">民俗文化</span>
+                        <span class="tag">生态旅游</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="culture-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-icon">🎨</div>
+            <h2 class="section-title">昆虫与人类文化</h2>
+            <p class="section-desc">昆虫深深融入了人类文明的方方面面——从语言艺术到地名风俗，处处可见它们的足迹</p>
+        </div>
+
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>📍 世界的地名与昆虫</h3>
+                </div>
+                <div class="card-body">
+                    <p>许多地名都与当地特有的昆虫密切相关，记录着人虫共生的历史印记。</p>
+                    <ul class="info-list">
+                        <li><strong>蝴蝶泉</strong>（云南大理）：每年农历四月十五，万千蝴蝶聚集于此</li>
+                        <li><strong>萤火虫洞</strong>（新西兰怀托摩）：地下溶洞中数百万萤火虫形成的奇幻景观</li>
+                        <li><strong>蝉鸣岭</strong>、<strong>蚂蚱沟</strong>等：中国各地以昆虫命名的自然地标</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag culture">地理文化</span>
+                        <span class="tag culture">自然遗产</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🎵 虫飞古诗中 & 🎼 昆虫与音乐</h3>
+                </div>
+                <div class="card-body">
+                    <p>从《诗经》到唐诗宋词，昆虫是文人墨客永恒的创作题材；它们也直接启发了乐器和乐曲。</p>
+                    <ul class="info-list">
+                        <li><strong>"穿花蛱蝶深深见，点水蜻蜓款款飞"</strong>——杜甫《曲江》</li>
+                        <li><strong>"小荷才露尖尖角，早有蜻蜓立上头"</strong>——杨万里《小池》</li>
+                        <li><strong>"蝉噪林逾静，鸟鸣山更幽"</strong>——王籍《入若耶溪》</li>
+                        <li><strong>古琴曲《广陵散》</strong>：取材于聂政刺韩王的故事，其中包含"杀蝉"乐段</li>
+                        <li><strong>唢呐</strong>：名称即来源于波斯语"surnāy"（唢呐），原意为昆虫鸣叫之声</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag culture">古典文学</span>
+                        <span class="tag culture">音乐艺术</span>
+                        <span class="tag culture">诗词歌赋</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>🎨 为艺术添彩 & ✉️ 方寸话昆虫</h3>
+                </div>
+                <div class="card-body">
+                    <p>昆虫的形象广泛出现在绘画、雕塑、邮票等艺术形式中，成为美的载体和文化符号。</p>
+                    <ul class="info-list">
+                        <li><strong>齐白石画虾</strong>：中国水墨画的巅峰之作，寥寥几笔形神兼备</li>
+                        <li><strong>邮票收藏</strong>：世界各国发行了大量以蝴蝶、蜜蜂为主题的珍邮</li>
+                        <li><strong>珠宝设计</strong>：蝴蝶造型是永恒的经典主题</li>
+                        <li><strong>敦煌壁画</strong>：飞天形象中的昆虫元素体现古人审美情趣</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag culture">视觉艺术</span>
+                        <span class="tag culture">集邮文化</span>
+                        <span class="tag culture">工艺美术</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>📖 成语典故 & 👤 姓氏中的昆虫</h3>
+                </div>
+                <div class="card-body">
+                    <p>汉语成语中蕴含丰富的昆虫意象，部分姓氏也源于昆虫崇拜或图腾。</p>
+                    <ul class="info-list">
+                        <li><strong>金蝉脱壳</strong>：比喻巧妙脱身</li>
+                        <li><strong>螳臂当车</strong>：喻不自量力</li>
+                        <li><strong>蜻蜓点水</strong>：形容做事肤浅不深入</li>
+                        <li><strong>蚕食鲸吞</strong>：比喻逐步侵占</li>
+                        <li><strong>蛾姓、蝶姓</strong>：罕见但真实存在的中文姓氏</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag culture">语言文化</span>
+                        <span class="tag culture">成语典故</span>
+                        <span class="tag culture">姓氏起源</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>⚔️ 昆虫与战争 & 🎪 民俗风情</h3>
+                </div>
+                <div class="card-body">
+                    <p>昆虫在战争史上扮演过特殊角色，也深度参与各民族的节日庆典和民俗活动。</p>
+                    <ul class="info-list">
+                        <li><strong>生物武器</strong>：二战期间日军曾在华使用带菌跳蚤进行细菌战</li>
+                        <li><strong>侦察用途</strong>：蜜蜂曾被用于探测地雷（对TNT敏感）</li>
+                        <li><strong>斗蟋蟀</strong>：中国千年传统，明清时期达到鼎盛</li>
+                        <li><strong>傣族泼水节</strong>：放生孔雀、蝴蝶等象征吉祥</li>
+                        <li><strong>苗族蜡染</strong>：蝴蝶妈妈是苗族创世神话的核心形象</li>
+                    </ul>
+                    <div class="tag-row">
+                        <span class="tag culture">军事历史</span>
+                        <span class="tag culture">民族习俗</span>
+                        <span class="tag culture">节庆文化</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <div class="card-header">
+                    <h3>💡 昆虫给人类的启示</h3>
+                </div>
+                <div class="card-body">
+                    <p>亿万年的进化赋予昆虫惊人的能力，人类从中获得无穷的科技灵感和人生感悟。</p>
+                    <ul class="info-list">
+                        <li><strong>团队协作</strong>：蚁群的高效协作启发分布式计算和群体智能算法</li>
+                        <li><strong>坚韧精神</strong>：蝉在地下蛰伏17年只为短暂一夏，象征坚持与等待的价值</li>
+                        <li><strong>蜕变重生</strong>：毛虫化蝶的过程象征着成长、转变和新生的希望</li>
+                        <li><strong>结构工程</strong>：蜂巢的六边形结构是最节省材料的建筑形态</li>
+                        <li><strong>仿生科技</strong>：壁虎脚掌启发强力胶水，苍蝇平衡器启发陀螺仪</li>
+                    </ul>
+                    <div class="highlight-box">
+                        🌟 "观察一只蚂蚁，你能学到整个宇宙的秩序" —— 达尔文
+                    </div>
+                    <div class="tag-row">
+                        <span class="tag culture">哲学思考</span>
+                        <span class="tag culture">仿生学</span>
+                        <span class="tag culture">生命教育</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>🏛️ 昆虫博物馆 | 探索微小生命中的宏大世界</p>
+        <p style="margin-top: 8px; font-size: 0.92em;">尊重每一种生命，理解每一个角色</p>
+        <div class="source-link">
+            📚 参考来源：<a href="https://kepu.net.cn/gb/lives/insect/relation/index.html" target="_blank">中国科学院科普云平台 - 昆虫博物馆</a> |
+            本页面内容仅供学习交流使用
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

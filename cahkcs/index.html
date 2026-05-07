@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员后台 - 昆虫与环保</title>
+    <link rel="icon" href="../ing/icu.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2d5016;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background: rgba(33, 37, 41, 0.98);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.15);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .nav-admin {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.88em;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 7px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.4em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        header p {
+            opacity: 0.85;
+            font-size: 1.05em;
+        }
+
+        main {
+            padding: 40px 0 70px;
+        }
+
+        .login-container {
+            max-width: 450px;
+            margin: 80px auto;
+            background: white;
+            border-radius: 18px;
+            padding: 45px 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-header .icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+
+        .login-header h2 {
+            color: #212529;
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-size: 0.92em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .hint-box {
+            margin-top: 22px;
+            padding: 14px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #666;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 26px 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6em;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.total { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-icon.pending { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stat-icon.approved { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stat-icon.rejected { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .stat-icon.visits { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+
+        .stat-info h3 {
+            font-size: 2em;
+            color: #212529;
+            line-height: 1.2;
+        }
+
+        .stat-info p {
+            color: #777;
+            font-size: 0.9em;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .panel-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px 26px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .panel-title {
+            font-size: 1.3em;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-tab {
+            padding: 8px 18px;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            color: #495057;
+        }
+
+        .filter-tab:hover {
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 10px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 0.9em;
+            width: 220px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #ff6b35;
+        }
+
+        .messages-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .messages-table th {
+            background: #f8f9fa;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .messages-table td {
+            padding: 16px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+            font-size: 0.93em;
+        }
+
+        .messages-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d4edda; color: #155724; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 7px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve { background: #28a745; color: white; }
+        .btn-approve:hover { background: #218838; }
+        .btn-reject { background: #dc3545; color: white; }
+        .btn-reject:hover { background: #c82333; }
+        .btn-delete { background: #6c757d; color: white; }
+        .btn-delete:hover { background: #5a6268; }
+
+        .content-preview {
+            max-width: 350px;
+            color: #495057;
+            line-height: 1.6;
+        }
+
+        .nickname-cell {
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .time-cell {
+            color: #6c757d;
+            font-size: 0.88em;
+            white-space: nowrap;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 50px !important;
+            color: #999;
+        }
+
+        .empty-row .icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+        }
+
+        .visit-settings {
+            padding: 24px 26px;
+        }
+
+        .visit-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .visit-input-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .visit-input-group label {
+            font-weight: 600;
+            color: #495057;
+            white-space: nowrap;
+        }
+
+        .visit-input {
+            padding: 12px 18px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1.1em;
+            width: 150px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .visit-input:focus {
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+        .save-btn {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+        }
+
+        .db-config-section {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px 24px;
+            margin: 30px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .db-config-section h3 {
+            color: #856404;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+
+        .db-config-section code {
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        .db-config-section p {
+            color: #856404;
+            font-size: 0.93em;
+            line-height: 1.7;
+            margin: 8px 0;
+        }
+
+        .password-settings {
+            padding: 24px 26px;
+        }
+
+        .password-form {
+            max-width: 500px;
+        }
+
+        .password-form-group {
+            margin-bottom: 18px;
+        }
+
+        .password-form-group label {
+            display: block;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.92em;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .password-input:focus {
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .change-password-btn {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .change-password-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .password-hint {
+            margin-top: 15px;
+            padding: 14px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.88em;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .toast.success { background: linear-gradient(135deg, #28a745 0%, #34ce57 100%); }
+        .toast.error { background: linear-gradient(135deg, #dc3545 0%, #e4606d 100%); }
+        .toast.warning { background: linear-gradient(135deg, #ffc107 0%, #ffcd39 100%); color: #212529; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .hidden { display: none !important; }
+
+        footer {
+            background: #212529;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.92em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .panel-header { flex-direction: column; align-items: stretch; }
+            .search-input { width: 100%; }
+            nav .container { flex-direction: column; gap: 12px; }
+            .messages-table { display: block; overflow-x: auto; }
+            .visit-row { flex-direction: column; align-items: stretch; }
+            .visit-input-group { min-width: auto; }
+        }
+    </style>
+    <script src="../api.js"></script>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="../index.html" class="nav-logo">🌿 昆虫与环保</a>
+        <div class="nav-admin" id="navAdmin">
+            <span class="admin-badge">🔐 管理员模式</span>
+            <button class="logout-btn" onclick="handleLogout()">退出登录</button>
+        </div>
+    </div>
+</nav>
+
+<header id="headerSection">
+    <div class="container">
+        <h1>🛠️ 管理员后台</h1>
+        <p>留言板内容管理系统 - 审核、删除、数据统计、访问量管理</p>
+    </div>
+</header>
+
+<main id="mainContent">
+    <!-- Login Form -->
+    <div class="login-container" id="loginForm">
+        <div class="login-header">
+            <div class="icon">🔐</div>
+            <h2>管理员登录</h2>
+            <p>请输入管理员密码以访问后台</p>
+        </div>
+        <form onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="adminPassword">🔑 管理员密码</label>
+                <input type="password" id="adminPassword" placeholder="请输入密码" required autocomplete="off">
+            </div>
+            <button type="submit" class="login-btn">🚀 登录后台</button>
+        </form>
+        <div class="hint-box">
+            💡 默认密码：<strong>admin123</strong><br>
+            （可在下方数据库配置中修改）
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="container hidden" id="dashboard">
+        <!-- 数据库配置说明 -->
+        <div class="db-config-section">
+            <h3>📌 数据库配置说明</h3>
+            <p><strong>当前系统使用 localStorage 作为数据存储（模拟数据库）</strong></p>
+            <p>如需连接真实数据库，请修改 JavaScript 中的以下函数：</p>
+            <p>• <code>getMessages()</code> - 获取留言数据 → 改为从 API/数据库查询</p>
+            <p>• <code>saveMessages(messages)</code> - 保存留言数据 → 改为写入 API/数据库</p>
+            <p>• <code>getVisitCount()</code> - 获取访问量 → 改为从数据库读取</p>
+            <p>• <code>saveVisitCount(count)</code> - 保存访问量 → 改为写入数据库</p>
+            <p>• <code>ADMIN_PASSWORD = 'admin123'</code> - 管理员密码 → 改为从数据库验证</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total">📊</div>
+                <div class="stat-info">
+                    <h3 id="totalCount">0</h3>
+                    <p>总留言数</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon pending">⏳</div>
+                <div class="stat-info">
+                    <h3 id="pendingCount">0</h3>
+                    <p>待审核</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon approved">✅</div>
+                <div class="stat-info">
+                    <h3 id="approvedCount">0</h3>
+                    <p>已通过</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon rejected">❌</div>
+                <div class="stat-info">
+                    <h3 id="rejectedCount">0</h3>
+                    <p>已拒绝</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon visits">👁️</div>
+                <div class="stat-info">
+                    <h3 id="visitCountDisplay">0</h3>
+                    <p>网站访问量</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 访问量设置面板 -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">👁️ 访问量管理</h2>
+            </div>
+            <div class="visit-settings">
+                <div class="visit-row">
+                    <div class="visit-input-group">
+                        <label for="visitInput">当前访问量：</label>
+                        <input type="number" id="visitInput" class="visit-input" min="0" placeholder="输入数量">
+                        <span style="color: #666;">次</span>
+                    </div>
+                    <button class="save-btn" onclick="saveVisitCount()">💾 保存修改</button>
+                </div>
+                <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
+                    💡 提示：修改后的数值将实时显示在网站首页底部。每次用户访问首页时，访问量会自动+1。
+                </p>
+            </div>
+        </div>
+
+        <!-- 密码修改面板 -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">🔑 修改管理员密码</h2>
+            </div>
+            <div class="password-settings">
+                <form class="password-form" onsubmit="return handleChangePassword(event)">
+                    <div class="password-form-group">
+                        <label for="oldPassword">🔒 当前密码（旧密码）</label>
+                        <input type="password" id="oldPassword" class="password-input"
+                               placeholder="请输入当前的管理员密码" required autocomplete="off">
+                    </div>
+                    <div class="password-form-group">
+                        <label for="newPassword">🆕 新密码</label>
+                        <input type="password" id="newPassword" class="password-input"
+                               placeholder="请输入新密码（6-50个字符）" required minlength="6" maxlength="50"
+                               autocomplete="off">
+                    </div>
+                    <div class="password-form-group">
+                        <label for="confirmPassword">✅ 确认新密码</label>
+                        <input type="password" id="confirmPassword" class="password-input"
+                               placeholder="请再次输入新密码" required minlength="6" maxlength="50"
+                               autocomplete="off">
+                    </div>
+                    <button type="submit" class="change-password-btn">
+                        🔐 修改密码
+                    </button>
+                </form>
+                <div class="password-hint">
+                    ⚠️ <strong>安全提示：</strong><br>
+                    • 修改密码后需要使用新密码重新登录<br>
+                    • 新密码长度应在 6-50 个字符之间<br>
+                    • 建议使用字母、数字和特殊字符的组合<br>
+                    • 密码将安全存储在数据库中
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">📋 留言管理列表</h2>
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">全部</button>
+                        <button class="filter-tab" data-filter="pending" onclick="setFilter('pending')">⏳ 待审核</button>
+                        <button class="filter-tab" data-filter="approved" onclick="setFilter('approved')">✅ 已通过</button>
+                        <button class="filter-tab" data-filter="rejected" onclick="setFilter('rejected')">❌ 已拒绝</button>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="🔍 搜索昵称或内容..." oninput="renderTable()">
+                    </div>
+                </div>
+            </div>
+            <table class="messages-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th style="width: 120px;">昵称</th>
+                        <th>留言内容</th>
+                        <th style="width: 130px;">时间</th>
+                        <th style="width: 90px;">状态</th>
+                        <th style="width: 200px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>🛠️ 管理员后台 | 昆虫与环保网站管理系统 v2.0</p>
+    </div>
+</footer>
+
+<script>
+    // ============================================================
+    // 📌 数据库配置区域 - 修改此处以连接真实数据库
+    // ============================================================
+    
+    /**
+     * 管理员密码配置
+     * 生产环境建议：从数据库读取并使用 bcrypt 加密存储
+     */
+    const ADMIN_PASSWORD = 'admin123';
+    const ADMIN_SESSION_KEY = 'admin_logged_in';
+
+    /**
+     * 数据库键名配置
+     * 如使用真实数据库，请替换为对应的 API 接口
+     */
+    const DB_KEYS = {
+        MESSAGES: 'guestbook_messages',      // 留言数据表名/API路径
+        VISIT_COUNT: 'site_visit_count'       // 访问量表名/API路径
+    };
+
+    // ============================================================
+    // 🔧 数据操作函数 - 连接数据库时修改这些函数
+    // ============================================================
+
+    /**
+     * 获取留言数据
+     * 数据库版本：改为 fetch('/api/messages') 或 db.query()
+     */
+    // 获取留言数据（使用真实API）
+    async function getMessages() {
+        try {
+            const result = await window.API.Message.getAll();
+            return result.success ? result.data : [];
+        } catch (error) {
+            console.error('获取留言失败:', error);
+            showToast('❌ 获取留言数据失败', 'error');
+            return [];
+        }
+    }
+
+    /**
+     * 保存留言数据（API模式不需要）
+     */
+    function saveMessages(messages) {
+        console.log('saveMessages: API模式下由后端处理');
+    }
+
+    /**
+     * 获取访问量（使用真实API）
+     */
+    async function getVisitCount() {
+        try {
+            const result = await window.API.Admin.getVisits();
+            return result.success ? result.data.count : 0;
+        } catch (error) {
+            console.error('获取访问量失败:', error);
+            return 0;
+        }
+    }
+
+    /**
+     * 保存访问量（使用真实API）
+     */
+    async function saveVisitCountData(count) {
+        try {
+            const result = await window.API.Admin.setVisits(count);
+            if (!result.success) {
+                throw new Error(result.error);
+            }
+        } catch (error) {
+            console.error('保存访问量失败:', error);
+            throw error;
+        }
+    }
+
+    // ============================================================
+    // 🎯 业务逻辑
+    // ============================================================
+
+    let currentFilter = 'all';
+
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function isLoggedIn() {
+        return sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
+    }
+
+    function checkAuth() {
+        if (isLoggedIn()) {
+            showDashboard();
+        } else {
+            showLoginForm();
+        }
+    }
+
+    function showLoginForm() {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('dashboard').classList.add('hidden');
+        document.getElementById('navAdmin').classList.add('hidden');
+    }
+
+    async function showDashboard() {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('navAdmin').classList.remove('hidden');
+        
+        // 并行加载所有数据
+        await Promise.all([
+            updateStats(),
+            loadVisitCount(),
+            renderTable()
+        ]);
+    }
+
+    async function handleLogin(event) {
+        event.preventDefault();
+        const password = document.getElementById('adminPassword').value;
+
+        try {
+            const result = await window.API.Admin.login(password);
+
+            if (result.success) {
+                sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+                sessionStorage.setItem('admin_token', result.data.token);
+                showToast('✅ 登录成功！欢迎回来', 'success');
+                showDashboard();
+            } else {
+                showToast(`❌ ${result.error || '密码错误'}`, 'error');
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        } catch (error) {
+            console.error('登录失败:', error);
+            showToast('❌ 登录请求失败', 'error');
+        }
+        return false;
+    }
+
+    function handleLogout() {
+        sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        showToast('👋 已安全退出', 'warning');
+        showLoginForm();
+    }
+
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    async function updateStats() {
+        try {
+            const result = await window.API.Message.getStats();
+            if (result.success) {
+                document.getElementById('totalCount').textContent = result.data.total;
+                document.getElementById('pendingCount').textContent = result.data.pending;
+                document.getElementById('approvedCount').textContent = result.data.approved;
+                document.getElementById('rejectedCount').textContent = result.data.rejected;
+            }
+        } catch (error) {
+            console.error('获取统计失败:', error);
+        }
+    }
+
+    async function loadVisitCount() {
+        try {
+            const count = await getVisitCount();
+            document.getElementById('visitCountDisplay').textContent = count.toLocaleString();
+            document.getElementById('visitInput').value = count;
+        } catch (error) {
+            console.error('加载访问量失败:', error);
+        }
+    }
+
+    async function saveVisitCount() {
+        const input = document.getElementById('visitInput');
+        let value = parseInt(input.value);
+
+        if (isNaN(value) || value < 0) {
+            showToast('❌ 请输入有效的数字', 'error');
+            return;
+        }
+
+        saveVisitCountData(value);
+        document.getElementById('visitCountDisplay').textContent = value.toLocaleString();
+        showToast(`✅ 访问量已更新为 ${value.toLocaleString()} 次`, 'success');
+    }
+
+    function setFilter(filter) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.filter === filter);
+        });
+        renderTable();
+    }
+
+    async function renderTable() {
+        try {
+            const messages = await getMessages();
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+
+            let filtered = messages;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(m => m.status === currentFilter);
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(m =>
+                    m.nickname.toLowerCase().includes(searchTerm) ||
+                    m.content.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // 按ID降序排序
+            filtered.sort((a, b) => b.id - a.id);
+
+            const tbody = document.getElementById('tableBody');
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-row">
+                        <div class="icon">📭</div>
+                        <div>${currentFilter === 'all' ? '暂无留言' : `暂无${getStatusText(currentFilter)}的留言`}</div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(msg => `
+            <tr>
+                <td>#${msg.id.toString().slice(-6)}</td>
+                <td class="nickname-cell">${escapeHtml(msg.nickname)}</td>
+                <td class="content-preview">${escapeHtml(msg.content)}</td>
+                <td class="time-cell">${formatTime(new Date(msg.created_at).getTime())}</td>
+                <td><span class="status-badge status-${msg.status}">${getStatusBadge(msg.status)}</span></td>
+                <td>
+                    <div class="action-btns">
+                        ${msg.status !== 'approved' ? `<button class="action-btn btn-approve" onclick="approveMessage(${msg.id})">✅ 通过</button>` : ''}
+                        ${msg.status !== 'rejected' ? `<button class="action-btn btn-reject" onclick="rejectMessage(${msg.id})">❌ 拒绝</button>` : ''}
+                        <button class="action-btn btn-delete" onclick="deleteMessage(${msg.id})">🗑️ 删除</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        } catch (error) {
+            console.error('渲染表格失败:', error);
+            showToast('❌ 加载留言数据失败', 'error');
+        }
+    }
+
+    function getStatusText(status) {
+        const map = { pending: '待审核', approved: '已通过', rejected: '已拒绝' };
+        return map[status] || status;
+    }
+
+    function getStatusBadge(status) {
+        const map = { pending: '⏳ 待审核', approved: '✅ 已通过', rejected: '❌ 已拒绝' };
+        return map[status] || status;
+    }
+
+    async function approveMessage(id) {
+        if (!confirm('确定要通过这条留言吗？')) return;
+
+        try {
+            await window.API.Message.updateStatus(id, 'approved');
+            updateStats();
+            await renderTable();
+            showToast('✅ 已通过审核', 'success');
+        } catch (error) {
+            console.error('审核失败:', error);
+            showToast('❌ 操作失败', 'error');
+        }
+    }
+
+    async function rejectMessage(id) {
+        if (!confirm('确定要拒绝这条留言吗？')) return;
+
+        try {
+            await window.API.Message.updateStatus(id, 'rejected');
+            updateStats();
+            await renderTable();
+            showToast('❌ 已拒绝该留言', 'warning');
+        } catch (error) {
+            console.error('拒绝失败:', error);
+            showToast('❌ 操作失败', 'error');
+        }
+    }
+
+    async function deleteMessage(id) {
+        if (!confirm('⚠️ 确定要删除这条留言吗？此操作不可恢复！')) return;
+
+        try {
+            await window.API.Message.delete(id);
+            updateStats();
+            await renderTable();
+            showToast('🗑️ 已删除留言', 'success');
+        } catch (error) {
+            console.error('删除失败:', error);
+            showToast('❌ 删除失败', 'error');
+        }
+    }
+
+    async function handleChangePassword(event) {
+        event.preventDefault();
+
+        const oldPassword = document.getElementById('oldPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // 前端验证
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            showToast('❌ 请填写所有字段', 'error');
+            return false;
+        }
+
+        if (newPassword !== confirmPassword) {
+            showToast('❌ 两次输入的新密码不一致', 'error');
+            return false;
+        }
+
+        if (newPassword.length < 6 || newPassword.length > 50) {
+            showToast('❌ 新密码长度应在6-50个字符之间', 'error');
+            return false;
+        }
+
+        try {
+            const result = await window.API.Admin.changePassword(oldPassword, newPassword);
+
+            if (result.success) {
+                showToast('✅ 密码修改成功！请重新登录', 'success');
+
+                // 清空表单
+                document.getElementById('oldPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+
+                // 2秒后自动退出登录，强制用户使用新密码登录
+                setTimeout(() => {
+                    handleLogout();
+                    showToast('🔐 请使用新密码重新登录', 'warning');
+                }, 2000);
+            } else {
+                showToast(`❌ ${result.error || '密码修改失败'}`, 'error');
+            }
+        } catch (error) {
+            console.error('密码修改失败:', error);
+            showToast('❌ 密码修改请求失败', 'error');
+        }
+
+        return false;
+    }
+
+    window.onload = function() {
+        checkAuth();
+    };
+</script>
+
+</body>
+</html>

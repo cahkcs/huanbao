@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>昆虫与环保 - 守护自然的微小英雄</title>
+    <link rel="icon" href="ing/icu.png" type="image/png">
+    <style>
+        /* ==================== 页面加载动画 ==================== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c23 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            text-align: center;
+            color: white;
+        }
+
+        .loader-icon {
+            font-size: 3em;
+            animation: bounce 1s ease infinite;
+            margin-bottom: 20px;
+        }
+
+        .loader-text {
+            font-size: 1.5em;
+            opacity: 0.9;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin-top: 25px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #aed581, #fff);
+            border-radius: 2px;
+            animation: loading 1.5s ease-in-out forwards;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* ==================== 基础样式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2d5016;
+            background: linear-gradient(135deg, #f0f9e8 0%, #e8f5e0 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background: rgba(45, 80, 22, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .nav-links a.active {
+            background: rgba(139, 195, 74, 0.3);
+            color: white;
+            position: relative;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: #aed581;
+            border-radius: 2px;
+            animation: slideIn 0.3s ease;
+        }
+
+        /* 移动端汉堡菜单按钮 */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+
+        header {
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c23 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🦋 🐝 🌿 🐞 🌸';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            letter-spacing: 30px;
+            opacity: 0.6;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.3em;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .stats-bar {
+            background: #fff;
+            padding: 40px 0;
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.1);
+            margin-top: -20px;
+            border-radius: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5em;
+            color: #4a7c23;
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2em;
+            color: #2d5016;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4a7c23, #8bc34a);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .intro-section {
+            background: white;
+            padding: 60px 0;
+        }
+
+        .intro-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .intro-text h2 {
+            color: #2d5016;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .intro-text p {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .intro-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(74, 124, 35, 0.2);
+        }
+
+        .intro-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(45, 80, 22, 0.8));
+            color: white;
+            padding: 25px;
+        }
+
+        .insects-showcase {
+            background: linear-gradient(180deg, #f8fdf4 0%, #ffffff 100%);
+        }
+
+        .insects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+        }
+
+        .insect-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .insect-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(74, 124, 35, 0.2);
+        }
+
+        .card-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .insect-card:hover .card-image img {
+            transform: scale(1.08);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #4a7c23;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .card-content {
+            padding: 25px;
+        }
+
+        .card-content h3 {
+            color: #2d5016;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-content p {
+            color: #666;
+            font-size: 0.98em;
+            margin-bottom: 15px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: #e8f5e0;
+            color: #4a7c23;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        .ecosystem-section {
+            background: #2d5016;
+            color: white;
+        }
+
+        .ecosystem-section .section-title {
+            color: white;
+        }
+
+        .ecosystem-section .section-title::after {
+            background: linear-gradient(90deg, #8bc34a, #aed581);
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .role-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 35px 28px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .role-card:hover {
+            background: rgba(255,255,255,0.18);
+            transform: scale(1.03);
+        }
+
+        .role-icon {
+            font-size: 3.5em;
+            margin-bottom: 18px;
+        }
+
+        .role-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            color: #aed581;
+        }
+
+        .role-card p {
+            font-size: 0.96em;
+            opacity: 0.92;
+            line-height: 1.7;
+        }
+
+        .threats-section {
+            background: white;
+        }
+
+        .threats-container {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .threat-list {
+            list-style: none;
+        }
+
+        .threat-list li {
+            background: #fef9e7;
+            border-left: 5px solid #ffa726;
+            padding: 22px 25px;
+            margin-bottom: 18px;
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .threat-list li:hover {
+            background: #fff8e1;
+            transform: translateX(8px);
+            box-shadow: 0 4px 15px rgba(255, 167, 38, 0.2);
+        }
+
+        .threat-list li strong {
+            color: #e65100;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.1em;
+        }
+
+        .threat-visual {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .threat-visual h3 {
+            color: #e65100;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .warning-stat {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .warning-stat .number {
+            font-size: 2.2em;
+            color: #ff5722;
+            font-weight: bold;
+        }
+
+        .actions-section {
+            background: linear-gradient(135deg, #e8f5e0 0%, #c8e6c9 100%);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 26px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            transition: all 0.3s ease;
+            border-top: 4px solid #4a7c23;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(74, 124, 35, 0.18);
+        }
+
+        .action-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: #4a7c23;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            color: #2d5016;
+            font-size: 1.2em;
+            margin-bottom: 12px;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.96em;
+        }
+
+        .gallery-section {
+            background: #fafafa;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+
+        .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75));
+            color: white;
+            padding: 18px 15px 12px;
+            font-size: 0.92em;
+        }
+
+        footer {
+            background: #1b3a0d;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        footer p {
+            opacity: 0.85;
+            font-size: 1.05em;
+        }
+
+        footer .emoji-row {
+            font-size: 1.8em;
+            margin-top: 15px;
+            letter-spacing: 15px;
+        }
+
+        /* ==================== 滚动进入动画 ==================== */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-left.animated {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-right.animated {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .animate-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-scale.animated {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 20px; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* ==================== 响应式设计 - 平板 ==================== */
+        @media (max-width: 1024px) {
+            header h1 { font-size: 2.5em; }
+            .insects-grid { grid-template-columns: repeat(2, 1fr); gap: 25px; }
+            .roles-grid { grid-template-columns: repeat(2, 1fr); }
+            .actions-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ==================== 响应式设计 - 手机 ==================== */
+        @media (max-width: 768px) {
+            /* 导航栏移动端适配 */
+            nav .container {
+                position: relative;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(45, 80, 22, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 10px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+                animation: slideDown 0.3s ease;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 15px 20px;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 1.1em;
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Header 移动端 */
+            header {
+                padding: 50px 0 40px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+                margin-bottom: 12px;
+            }
+
+            header p {
+                font-size: 1em;
+                padding: 0 20px;
+            }
+
+            header::before {
+                display: none;
+            }
+
+            /* Header 移动端 */
+            .stats-bar {
+                margin-top: -15px;
+                border-radius: 16px;
+                padding: 30px 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-item h3 {
+                font-size: 1.8em;
+            }
+
+            /* 介绍区域移动端 */
+            .intro-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .intro-image img {
+                height: 280px;
+            }
+
+            .intro-text h2 {
+                font-size: 1.5em;
+            }
+
+            /* 昆虫卡片移动端 */
+            .insects-showcase {
+                padding: 40px 0;
+            }
+
+            .section-title {
+                font-size: 1.6em;
+            }
+
+            .insects-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card-image {
+                height: 200px;
+            }
+
+            .card-content {
+                padding: 18px 20px;
+            }
+
+            .card-content h3 {
+                font-size: 1.2em;
+            }
+
+            /* 角色卡片移动端 */
+            .roles-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .role-card {
+                padding: 25px 20px;
+            }
+
+            /* 危机区域移动端 */
+            .threats-container {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .threat-visual {
+                order: -1;
+            }
+
+            /* 行动指南移动端 */
+            .actions-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .action-card {
+                padding: 24px 20px;
+            }
+
+            /* 图片画廊移动端 */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .gallery-item:nth-child(1) {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            .gallery-item {
+                aspect-ratio: 4/3;
+            }
+
+            /* Footer 移动端 */
+            footer {
+                padding: 35px 15px;
+            }
+
+            footer p {
+                font-size: 0.95em;
+            }
+
+            footer .emoji-row {
+                letter-spacing: 8px;
+                font-size: 1.5em;
+            }
+
+            .visit-counter {
+                padding: 14px !important;
+                flex-wrap: wrap;
+                gap: 5px !important;
+            }
+
+            #visitCount {
+                font-size: 1.4em !important;
+            }
+        }
+
+        /* 超小屏幕（手机竖屏） */
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.5em; }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-item h3 {
+                font-size: 1.5em;
+            }
+
+            .stat-item p {
+                font-size: 0.85em;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item:nth-child(1) {
+                grid-column: span 1;
+            }
+        }
+    </style>
+    <script src="api.js"></script>
+</head>
+<body>
+
+<!-- 页面加载动画 -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loader">
+        <div class="loader-icon">🦋</div>
+        <div class="loader-text">正在加载精彩内容...</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+</div>
+
+<nav>
+    <div class="container">
+        <a href="index.html" class="nav-logo">🌿 昆虫与环保</a>
+        <div class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">🏠 首页</a></li>
+            <li><a href="museum.html">🏛️ 昆虫博物馆</a></li>
+            <li><a href="contribution.html">♻️ 环保贡献</a></li>
+            <li><a href="guestbook.html">💬 留言板</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header class="animate-on-scroll">
+    <div class="container">
+        <h1>🦋 昆虫与环保 🌿</h1>
+        <p>探索自然界中那些被忽视的微小英雄，了解它们如何守护着我们的地球家园，以及我们该如何保护这些珍贵的生命</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="stats-bar animate-scale">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>1,000万+</h3>
+                <p>已知昆虫物种数量</p>
+            </div>
+            <div class="stat-item">
+                <h3>75%</h3>
+                <p>全球粮食作物依赖昆虫授粉</p>
+            </div>
+            <div class="stat-item">
+                <h3>40%</h3>
+                <p>昆虫种群数量正在下降</p>
+            </div>
+            <div class="stat-item">
+                <h3>100万+</h3>
+                <p>面临灭绝威胁的物种</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="intro-section animate-on-scroll">
+    <div class="container">
+        <div class="intro-content">
+            <div class="intro-text">
+                <h2>🌍 为什么昆虫对环境如此重要？</h2>
+                <p>昆虫是地球上最古老、最多样化的生物群体之一，它们已经存在了超过4亿年。虽然体型微小，但它们在维持生态系统平衡方面扮演着不可替代的角色。</p>
+                <p>从授粉传粉到分解有机物，从控制害虫到作为食物链的基础环节，昆虫的生态服务价值每年高达<strong style="color:#4a7c23">数千亿美元</strong>。然而，由于栖息地丧失、气候变化和农药滥用等原因，全球昆虫种群正以前所未有的速度衰退。</p>
+                <p>保护昆虫就是保护我们自己的未来。让我们一起走进这个神奇的微观世界，了解这些"小巨人"的重要性！</p>
+            </div>
+            <div class="intro-image">
+                <img src="ing/bacan.jpg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="insects-showcase animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">🐛 自然界的环保卫士</h2>
+        <div class="insects-grid">
+            <div class="insect-card">
+                <div class="card-image">
+                    <img src="ing/Bee.png" alt="蜜蜂采蜜">
+                    <span class="card-badge">⭐ 最重要</span>
+                </div>
+                <div class="card-content">
+                    <h3>🐝 蜜蜂 — 大自然的授粉者</h3>
+                    <p>蜜蜂是全球最重要的授粉昆虫之一。一只工蜂一生可以访问多达5000朵花，为约80%的开花植物提供授粉服务。没有蜜蜂，我们将失去苹果、杏仁、咖啡等众多食物。</p>
+                    <div class="card-tags">
+                        <span class="tag">授粉</span>
+                        <span class="tag">蜂蜜生产</span>
+                        <span class="tag">食物安全</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insect-card">
+                <div class="card-image">
+                    <img src="ing/butterfly.png" alt="蝴蝶飞舞">
+                    <span class="card-badge">🌺 美丽使者</span>
+                </div>
+                <div class="card-content">
+                    <h3>🦋 蝴蝶 — 生态健康的指示器</h3>
+                    <p>蝴蝶不仅是美丽的象征，更是生态环境质量的敏感指示器。它们参与植物授粉，其幼虫阶段还能帮助控制特定植物的生长。蝴蝶种群的多样性直接反映了当地生态系统的健康状况。</p>
+                    <div class="card-tags">
+                        <span class="tag">授粉</span>
+                        <span class="tag">生态指示</span>
+                        <span class="tag">美学价值</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insect-card">
+                <div class="card-image">
+                    <img src="ing/Dragonfly.png" alt="蜻蜓停歇">
+                    <span class="card-badge">🎯 天然猎手</span>
+                </div>
+                <div class="card-content">
+                    <h3>🪰 蜻蜓 — 蚊子的天敌</h3>
+                    <p>蜻蜓是地球上最高效的捕食者之一，捕食成功率高达95%（远超狮子的25%）。它们以蚊子、苍蝇等害虫为食，一只蜻蜓每天可吃掉数百只蚊子，是天然的害虫控制系统。</p>
+                    <div class="card-tags">
+                        <span class="tag">害虫防治</span>
+                        <span class="tag">水质监测</span>
+                        <span class="tag">生物防控</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insect-card">
+                <div class="card-image">
+                    <img src="ing/jia.png" alt="瓢虫在叶片上">
+                    <span class="card-badge">🛡️ 益虫代表</span>
+                </div>
+                <div class="card-content">
+                    <h3>🐞 瓢虫 — 农田的守护神</h3>
+                    <p>七星瓢虫是著名的益虫，主要以蚜虫等农业害虫为食。一只成年瓢虫在其生命周期中可以吃掉多达5000只蚜虫，是有机农业中不可或缺的生物防治力量。</p>
+                    <div class="card-tags">
+                        <span class="tag">生物防治</span>
+                        <span class="tag">农业保护</span>
+                        <span class="tag">有机种植</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="ecosystem-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">♻️ 昆虫在生态系统中的关键角色</h2>
+        <div class="roles-grid">
+            <div class="role-card">
+                <div class="role-icon">🌸</div>
+                <h3>授粉传粉</h3>
+                <p>约75%的主要粮食作物依赖动物授粉，其中大部分由昆虫完成。没有昆虫授粉，全球粮食产量将大幅下降，影响数十亿人的食物供应。</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">🔄</div>
+                <h3>物质分解</h3>
+                <p>甲虫、苍蝇等分解者将动植物残骸转化为土壤养分，完成自然界的物质循环。没有它们，地球将被废弃物覆盖，生态系统将崩溃。</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">🔗</div>
+                <h3>食物链基础</h3>
+                <p>昆虫是无数鸟类、两栖类、爬行类和小型哺乳动物的主要食物来源。它们构成了陆地生态系统食物网的基础层，支撑着整个生物群落。</p>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">⚖️</div>
+                <h3>种群调控</h3>
+                <p>许多捕食性昆虫如螳螂、草蛉等能控制植食性害虫的数量，维持生态平衡。这种天然的控制机制比化学农药更可持续、更环保。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="threats-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">⚠️ 昆虫面临的生存危机</h2>
+        <div class="threats-container">
+            <ul class="threat-list">
+                <li>
+                    <strong>🏗️ 栖息地丧失与破碎化</strong>
+                    城市化扩张、农业开垦和森林砍伐导致大量自然栖息地消失，昆虫失去了赖以生存的家园和食物来源。
+                </li>
+                <li>
+                    <strong>☠️ 农药与化学品污染</strong>
+                    广泛使用的新烟碱类杀虫剂等化学品对非目标昆虫造成严重伤害，导致蜜蜂等益虫大规模死亡。
+                </li>
+                <li>
+                    <strong>🌡️ 气候变化的影响</strong>
+                    全球变暖改变了昆虫的生活周期和分布范围，极端天气事件直接摧毁了脆弱的昆虫种群。
+                </li>
+                <li>
+                    <strong>💡 光污染问题</strong>
+                    人造光源干扰了夜间活动昆虫的行为模式，影响其觅食、繁殖和迁徙，萤火虫受影响尤为严重。
+                </li>
+                <li>
+                    <strong>🌿 入侵物种威胁</strong>
+                    外来入侵物种与本地昆虫竞争资源、传播疾病或直接捕食本地物种，破坏原有的生态平衡。
+                </li>
+            </ul>
+            <div class="threat-visual">
+                <h3>📊 触目惊心的数据</h3>
+                <div class="warning-stat">
+                    <div class="number">27%</div>
+                    过去30年德国保护区内的飞行昆虫数量下降幅度
+                </div>
+                <div class="warning-stat">
+                    <div class="number">41%</div>
+                    全球蜜蜂种群在过去十年中的减少比例
+                </div>
+                <div class="warning-stat">
+                    <div class="number">1/4</div>
+                    目前面临灭绝风险的已知昆虫物种比例
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="actions-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">🤝 我们能做什么？</h2>
+        <div class="actions-grid">
+            <div class="action-card">
+                <span class="action-number">1</span>
+                <h3>打造昆虫友好花园</h3>
+                <p>种植本土花卉，避免单一草坪，为昆虫提供多样性的食物来源和庇护所。选择不同花期植物确保全年都有花蜜供应。</p>
+            </div>
+            <div class="action-card">
+                <span class="action-number">2</span>
+                <h3>减少农药使用</h3>
+                <p>优先采用物理防治和生物防治方法治理害虫。如果必须使用农药，选择低毒性产品并严格按照说明使用，避免在花期喷洒。</p>
+            </div>
+            <div class="action-card">
+                <span class="action-number">3</span>
+                <h3>提供人工栖息地</h3>
+                <p>制作昆虫旅馆、保留枯木落叶堆、建造小水池，为不同类型的昆虫提供越冬场所、产卵地点和饮水水源。</p>
+            </div>
+            <div class="action-card">
+                <span class="action-number">4</span>
+                <h3>减少光污染</h3>
+                <p>户外照明使用暖色调LED灯，安装运动传感器或定时器，关闭不必要的夜间灯光，让萤火虫和其他夜行昆虫重获黑暗天空。</p>
+            </div>
+            <div class="action-card">
+                <span class="action-number">5</span>
+                <h3>支持有机产品</h3>
+                <p>购买有机认证的食品和农产品，支持不使用有害农药的农业生产方式，用消费选择推动更环保的农业实践。</p>
+            </div>
+            <div class="action-card">
+                <span class="action-number">6</span>
+                <h3>参与公民科学</h3>
+                <p>加入昆虫观察项目，记录身边的昆虫种类和数量变化。数据共享帮助科学家更好地了解昆虫种群状况和保护需求。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>🌍 保护昆虫，守护地球的未来 | 每一个小小的行动都能带来改变</p>
+        <p style="margin-top: 10px; font-size: 0.95em;">让我们携手共建人与自然和谐共生的美好家园</p>
+        <div class="emoji-row">🦋 🐝 🌿 🐞 🌸 🌍 ♻️ 💚</div>
+        
+        <!-- 访问量统计 -->
+        <div class="visit-counter" style="margin-top: 25px; padding: 18px; background: rgba(255,255,255,0.1); border-radius: 12px; text-align: center;">
+            <span style="font-size: 1.8em; margin-right: 10px;">👁️</span>
+            <span style="font-size: 1.15em; color: #aed581;">网站总访问量：</span>
+            <span id="visitCount" style="font-size: 1.6em; font-weight: bold; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">0</span>
+            <span style="font-size: 1.05em; color: #aed581; margin-left: 5px;">次</span>
+        </div>
+
+        <p style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.88em; opacity: 0.75;">
+            📚 素材来源：<a href="https://baike.baidu.com/" target="_blank" style="color: #aed581; text-decoration: none;">百度百科</a> | 
+            本页面内容仅供学习交流使用
+        </p>
+    </div>
+</footer>
+
+<script>
+    // 访问量统计功能（使用真实API）
+    (async function() {
+        try {
+            const result = await window.API.Visit.increment();
+            
+            if (result.success) {
+                const count = result.data.count;
+                
+                // 显示访问量（带动画效果）
+                const visitEl = document.getElementById('visitCount');
+                if (visitEl) {
+                    animateNumber(visitEl, 0, count, 1500);
+                }
+            }
+        } catch (error) {
+            console.warn('获取访问量失败，使用本地缓存:', error);
+            
+            // API失败时降级到localStorage
+            const VISIT_KEY = 'site_visit_count';
+            let count = parseInt(localStorage.getItem(VISIT_KEY)) || 0;
+            count++;
+            localStorage.setItem(VISIT_KEY, count.toString());
+            
+            const visitEl = document.getElementById('visitCount');
+            if (visitEl) {
+                animateNumber(visitEl, 0, count, 1500);
+            }
+        }
+        
+        // 数字递增动画
+        function animateNumber(element, start, end, duration) {
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 缓动函数 - easeOutExpo
+                const easeProgress = 1 - Math.pow(2, -10 * progress);
+                const current = Math.floor(start + (end - start) * easeProgress);
+                
+                element.textContent = current.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = end.toLocaleString();
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+    })();
+</script>
+
+<!-- ==================== 动画与交互脚本 ==================== -->
+<script>
+    // ==================== 页面加载动画 ====================
+    window.addEventListener('load', function() {
+        const loadingScreen = document.getElementById('loadingScreen');
+        
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+            
+            // 加载完成后移除loading screen
+            setTimeout(() => {
+                loadingScreen.remove();
+            }, 600);
+        }, 1800);
+        
+        // 初始化滚动动画
+        initScrollAnimations();
+        
+        // 检测设备类型
+        detectDevice();
+    });
+
+    // ==================== 移动端菜单切换 ====================
+    function toggleMobileMenu() {
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        menuBtn.classList.toggle('active');
+        navLinks.classList.toggle('active');
+        
+        // 阻止背景滚动
+        if (navLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }
+
+    // 点击导航链接后关闭移动端菜单
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', function() {
+            const navLinks = document.getElementById('navLinks');
+            const menuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (window.innerWidth <= 768) {
+                navLinks.classList.remove('active');
+                menuBtn.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // ==================== 滚动进入动画 ====================
+    function initScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-left, .animate-right, .animate-scale');
+        
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        animatedElements.forEach(el => {
+            observer.observe(el);
+        });
+    }
+
+    // ==================== 设备检测与优化 ====================
+    function detectDevice() {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isTablet = window.innerWidth <= 1024 && window.innerWidth > 768;
+        const isPhone = window.innerWidth <= 768;
+        
+        // 为移动端添加触摸反馈
+        if (isMobile || isPhone) {
+            addTouchFeedback();
+            
+            // 优化图片加载
+            optimizeImagesForMobile();
+        }
+        
+        // 控制台输出设备信息（开发用）
+        console.log(`📱 设备检测: ${isPhone ? '手机' : isTablet ? '平板' : '桌面端'} | 屏幕宽度: ${window.innerWidth}px`);
+    }
+
+    // 触摸反馈效果
+    function addTouchFeedback() {
+        const interactiveElements = document.querySelectorAll('a, button, .insect-card, .action-card, .role-card');
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('touchstart', function() {
+                this.style.transform = 'scale(0.98)';
+            });
+            
+            el.addEventListener('touchend', function() {
+                this.style.transform = '';
+            });
+        });
+    }
+
+    // 移动端图片优化
+    function optimizeImagesForMobile() {
+        const images = document.querySelectorAll('img');
+        
+        images.forEach(img => {
+            img.loading = 'lazy';
+            
+            // 添加加载失败占位图
+            img.onerror = function() {
+                this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23e8f5e0" width="100" height="100"/><text x="50%" y="50%" text-anchor="middle" fill="%234a7c23" font-size="12">🦋</text></svg>';
+            };
+        });
+    }
+
+    // ==================== 导航栏滚动效果 ====================
+    let lastScrollTop = 0;
+    
+    window.addEventListener('scroll', function() {
+        const nav = document.querySelector('nav');
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // 添加/移除阴影效果
+        if (scrollTop > 50) {
+            nav.style.boxShadow = '0 4px 25px rgba(0,0,0,0.15)';
+        } else {
+            nav.style.boxShadow = '0 2px 15px rgba(0,0,0,0.1)';
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+
+    // ==================== 平滑滚动增强 ====================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                const offsetTop = targetElement.offsetTop - 80;
+                
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // ==================== 页面可见性API - 标题动画 ====================
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            // 用户返回页面时，重新触发header动画
+            const header = document.querySelector('header');
+            if (header && !header.classList.contains('animated')) {
+                header.classList.add('animated');
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

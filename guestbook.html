@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板 - 昆虫与环保</title>
+    <link rel="icon" href="ing/icu.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2d5016;
+            background: linear-gradient(135deg, #f0f9e8 0%, #e8f5e0 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background: rgba(45, 80, 22, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .nav-links a.active {
+            background: rgba(139, 195, 74, 0.3);
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '💬 📝 ✍️ 💭 🌿';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            letter-spacing: 28px;
+            opacity: 0.6;
+        }
+
+        header h1 {
+            font-size: 2.6em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            max-width: 650px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .breadcrumb {
+            background: white;
+            padding: 14px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .breadcrumb span {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .breadcrumb a {
+            color: #4a7c23;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 50px 0 70px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 35px;
+            align-items: start;
+        }
+
+        .write-section {
+            background: white;
+            border-radius: 18px;
+            padding: 32px 28px;
+            box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 90px;
+        }
+
+        .write-section h2 {
+            color: #2d5016;
+            font-size: 1.5em;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4a7c23;
+            box-shadow: 0 0 0 3px rgba(74, 124, 35, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4a7c23 0%, #5d9c2f 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 124, 35, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .rules-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: #fff8e1;
+            border-radius: 10px;
+            border-left: 4px solid #ffa726;
+        }
+
+        .rules-box h4 {
+            color: #e65100;
+            font-size: 0.92em;
+            margin-bottom: 8px;
+        }
+
+        .rules-box ul {
+            list-style: none;
+            font-size: 0.86em;
+            color: #bf360c;
+        }
+
+        .rules-box li {
+            padding: 3px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .rules-box li::before {
+            content: '⚠';
+            position: absolute;
+            left: 0;
+            font-size: 0.85em;
+        }
+
+        .messages-section h2 {
+            color: #2d5016;
+            font-size: 1.6em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .message-count {
+            background: #e8f5e0;
+            color: #4a7c23;
+            padding: 5px 14px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: normal;
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 14px;
+            padding: 24px 26px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border-left: 4px solid #4a7c23;
+        }
+
+        .message-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateX(4px);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .message-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #81c784 0%, #aed581 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .author-info h4 {
+            color: #2d5016;
+            font-size: 1.05em;
+        }
+
+        .author-info span {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .message-time {
+            color: #aaa;
+            font-size: 0.88em;
+        }
+
+        .message-content {
+            color: #444;
+            font-size: 1em;
+            line-height: 1.75;
+            padding-left: 50px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 30px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .empty-state .icon {
+            font-size: 4em;
+            margin-bottom: 18px;
+        }
+
+        .empty-state h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #999;
+            font-size: 0.98em;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, #e53935 0%, #ef5350 100%);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .pagination-btn {
+            padding: 10px 18px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: #4a7c23;
+            color: white;
+            border-color: #4a7c23;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 124, 35, 0.3);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: linear-gradient(135deg, #4a7c23 0%, #5d9c2f 100%);
+            color: white;
+            border-color: transparent;
+            font-weight: bold;
+        }
+
+        .page-info {
+            font-size: 0.92em;
+            color: #666;
+            padding: 0 12px;
+        }
+
+        footer {
+            background: #1b3a0d;
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        footer p {
+            opacity: 0.88;
+            font-size: 1em;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .write-section {
+                position: static;
+            }
+            header h1 { font-size: 2em; }
+            nav .container { flex-direction: column; gap: 12px; }
+            .nav-links { gap: 15px; }
+        }
+
+        @media (max-width: 768px) {
+            header::before {
+                display: none;
+            }
+            header h1 { font-size: 1.8em; }
+            header p { font-size: 1em; padding: 0 20px; }
+        }
+    </style>
+    <script src="api.js"></script>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="index.html" class="nav-logo">🌿 昆虫与环保</a>
+        <ul class="nav-links">
+            <li><a href="index.html">🏠 首页</a></li>
+            <li><a href="museum.html">🏛️ 昆虫博物馆</a></li>
+            <li><a href="contribution.html">♻️ 环保贡献</a></li>
+            <li><a href="guestbook.html" class="active">💬 留言板</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header>
+    <div class="container">
+        <h1>💬 游客留言板</h1>
+        <p>分享你对昆虫与环保的想法，留下你的足迹，让更多人听到你的声音</p>
+    </div>
+</header>
+
+<div class="breadcrumb">
+    <div class="container">
+        <span><a href="index.html">🏠 首页</a> > 💬 留言板</span>
+    </div>
+</div>
+
+<main>
+    <div class="container">
+        <div class="main-grid">
+            <aside class="write-section">
+                <h2>✍️ 写留言</h2>
+                <form id="messageForm" onsubmit="return handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="nickname">👤 你的昵称</label>
+                        <input type="text" id="nickname" placeholder="请输入昵称（必填）" maxlength="20" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">💭 留言内容</label>
+                        <textarea id="content" placeholder="写下你想说的话..." maxlength="500" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">🚀 发布留言</button>
+                </form>
+                <div class="rules-box">
+                    <h4>📋 留言须知</h4>
+                    <ul>
+                        <li>禁止发布违法、暴力、色情内容</li>
+                        <li>禁止广告推广、刷屏行为</li>
+                        <li>尊重他人，文明发言</li>
+                        <li>系统自动过滤敏感词</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="messages-section">
+                <h2>
+                    📋 全部留言
+                    <span class="message-count" id="msgCount">0 条</span>
+                </h2>
+                <div id="messagesList"></div>
+                <div class="pagination" id="pagination"></div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>💬 留言板 | 感谢每一位访客的真诚分享</p>
+        <p style="margin-top: 8px; font-size: 0.92em;">让我们共同守护这片绿色家园</p>
+    </div>
+</footer>
+
+<script>
+    const BANNED_WORDS = [
+        '垃圾', '傻逼', '妈的', '操你', '去死', '杀', '死',
+        '广告', '加微信', 'QQ群', '赚钱', '兼职', '贷款',
+        '赌博', '博彩', '彩票', '中奖', '免费领取',
+        '涉黄', '色情', '裸聊', '约炮', '一夜情',
+        '政治', '反动', '推翻', '造反',
+        '毒品', '冰毒', '海洛因', '大麻'
+    ];
+
+    let currentPage = 1;
+    const PAGE_SIZE = 5;
+
+    // ============================================================
+    // 🛡️ 安全防护系统 - 防注入 + 防XSS
+    // ============================================================
+
+    /**
+     * 防SQL注入/NoSQL注入 - 过滤危险字符
+     */
+    function sanitizeInput(text) {
+        if (typeof text !== 'string') return '';
+        
+        // 移除控制字符
+        text = text.replace(/[\x00-\x1F\x7F]/g, '');
+        
+        // 转义HTML特殊字符（基础XSS防护）
+        text = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/\//g, '&#x2F;');
+        
+        // 移除可能的脚本注入
+        text = text.replace(/javascript:/gi, '');
+        text = text.replace(/on\w+\s*=/gi, '');
+        
+        // 限制输入长度防止缓冲区溢出攻击
+        if (text.length > 1000) {
+            text = text.substring(0, 1000);
+        }
+        
+        return text.trim();
+    }
+
+    /**
+     * 深度XSS防护 - 检测并移除潜在恶意代码
+     * @param {string} html - 可能包含HTML的字符串
+     * @returns {string} - 清理后的安全文本
+     */
+    function deepSanitize(html) {
+        let temp = document.createElement('div');
+        temp.textContent = html;
+        return temp.innerHTML;
+    }
+
+    /**
+     * CSP内容安全策略模拟 - 检测危险模式
+     * @param {string} input - 用户输入
+     * @returns {object} - { safe: boolean, reason: string }
+     */
+    function securityCheck(input) {
+        const dangerousPatterns = [
+            { pattern: /<script[\s\S]*?>/gi, name: 'script标签' },
+            { pattern: /<iframe[\s\S]*?>/gi, name: 'iframe标签' },
+            { pattern: /<object[\s\S]*?>/gi, name: 'object标签' },
+            { pattern: /<embed[\s\S]*?>/gi, name: 'embed标签' },
+            { pattern: /on(error|load|click|mouseover|focus|blur)\s*=/gi, name: '事件处理器' },
+            { pattern: /data:\s*text\/html/gi, name: 'Data URI' },
+            { pattern: /vbscript:/gi, name: 'VBScript协议' },
+            { pattern: /expression\s*\(/gi, name: 'CSS表达式' },
+            { pattern: /@import/gi, name: 'CSS导入' },
+            { pattern: /document\.cookie/gi, name: 'Cookie访问' },
+            { pattern: /document\.write/gi, name: 'DOM写入' },
+            { pattern: /eval\s*\(/gi, name: 'eval函数' },
+            { pattern: /alert\s*\(/gi, name: '弹窗函数' },
+            { pattern: /\$\(document\)/gi, name: 'jQuery注入' },
+            { pattern: /union\s+select/gi, name: 'SQL注入' },
+            { pattern: /drop\s+table/gi, name: 'SQL删除表' },
+            { pattern: /--$/gm, name: 'SQL注释' },
+            { pattern: /;\s*--/g, name: 'SQL注释符' },
+            { pattern: /\/\*.*?\*\//gs, name: '多行注释' },
+            { pattern: /exec\s*\(/gi, name: '命令执行' },
+            { pattern: /system\s*\(/gi, name: '系统命令' }
+        ];
+
+        for (let item of dangerousPatterns) {
+            if (item.pattern.test(input)) {
+                return {
+                    safe: false,
+                    reason: `检测到危险内容：${item.name}`
+                };
+            }
+        }
+
+        return { safe: true, reason: '' };
+    }
+
+    function checkBannedWords(text) {
+        const found = [];
+        for (let word of BANNED_WORDS) {
+            if (text.includes(word)) {
+                found.push(word);
+            }
+        }
+        return found;
+    }
+
+    function filterContent(text) {
+        let filtered = text;
+        for (let word of BANNED_WORDS) {
+            const regex = new RegExp(word, 'gi');
+            filtered = filtered.replace(regex, '*'.repeat(word.length));
+        }
+        return filtered;
+    }
+
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // 获取留言数据（使用真实API）
+    async function getMessages() {
+        try {
+            const result = await window.API.Message.getAll({ status: 'approved' });
+            if (result.success) {
+                return result.data.map(msg => ({
+                    ...msg,
+                    timestamp: new Date(msg.created_at).getTime()
+                }));
+            }
+            return [];
+        } catch (error) {
+            console.error('获取留言失败:', error);
+            showToast('❌ 获取留言失败，请刷新重试', 'error');
+            return [];
+        }
+    }
+
+    async function saveMessages(messages) {
+        // API模式下不需要此函数，由后端处理
+        console.log('saveMessages: API模式，无需前端保存');
+    }
+
+    function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+
+        if (diff < 60000) return '刚刚';
+        if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+        if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
+        if (diff < 604800000) return Math.floor(diff / 86400000) + ' 天前';
+
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    }
+
+    function getAvatarColor(name) {
+        const colors = [
+            ['#81c784', '#aed581'],
+            ['#64b5f6', '#90caf9'],
+            ['#ba68c8', '#ce93d8'],
+            ['#ffb74d', '#ffd54f'],
+            ['#4db6ac', '#80cbc4'],
+            ['#f06292', '#f48fb1']
+        ];
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return colors[Math.abs(hash) % colors.length];
+    }
+
+    async function renderMessages() {
+        const messages = await getMessages();
+        const container = document.getElementById('messagesList');
+        const countEl = document.getElementById('msgCount');
+
+        countEl.textContent = `${messages.length} 条`;
+
+        if (messages.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🌿</div>
+                    <h3>暂无留言</h3>
+                    <p>成为第一个分享想法的人吧！</p>
+                </div>
+            `;
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        const approvedMessages = messages.filter(msg => msg.status === 'approved');
+        countEl.textContent = `${approvedMessages.length} 条`;
+
+        if (approvedMessages.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">⏳</div>
+                    <h3>留言审核中</h3>
+                    <p>已有 ${messages.length} 条留言等待管理员审核，请稍后再来查看~</p>
+                </div>
+            `;
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        const totalPages = Math.ceil(approvedMessages.length / PAGE_SIZE);
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
+        const startIndex = (currentPage - 1) * PAGE_SIZE;
+        const endIndex = startIndex + PAGE_SIZE;
+        const pageMessages = approvedMessages.reverse().slice(startIndex, endIndex);
+
+        container.innerHTML = pageMessages.map(msg => {
+            const colors = getAvatarColor(msg.nickname);
+            const initial = msg.nickname.charAt(0).toUpperCase();
+            return `
+                <div class="message-card">
+                    <div class="message-header">
+                        <div class="message-author">
+                            <div class="avatar" style="background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1]} 100%)">${initial}</div>
+                            <div class="author-info">
+                                <h4>${escapeHtml(msg.nickname)}</h4>
+                                <span>环保爱好者</span>
+                            </div>
+                        </div>
+                        <span class="message-time">${formatTime(msg.timestamp)}</span>
+                    </div>
+                    <div class="message-content">${escapeHtml(filterContent(msg.content))}</div>
+                </div>
+            `;
+        }).join('');
+
+        renderPagination(totalPages, approvedMessages.length);
+    }
+
+    function renderPagination(totalPages, totalItems) {
+        const paginationContainer = document.getElementById('pagination');
+
+        if (totalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+
+        html += `<button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>◀ 上一页</button>`;
+
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        if (startPage > 1) {
+            html += `<button class="pagination-btn" onclick="changePage(1)">1</button>`;
+            if (startPage > 2) {
+                html += `<span class="page-info">...</span>`;
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                html += `<span class="page-info">...</span>`;
+            }
+            html += `<button class="pagination-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
+        }
+
+        html += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>下一页 ▶</button>`;
+
+        const startItem = (currentPage - 1) * PAGE_SIZE + 1;
+        const endItem = Math.min(currentPage * PAGE_SIZE, totalItems);
+
+        html += `<span class="page-info">第 ${startItem}-${endItem} 条 / 共 ${totalItems} 条</span>`;
+
+        paginationContainer.innerHTML = html;
+    }
+
+    function changePage(page) {
+        currentPage = page;
+        renderMessages();
+
+        const messagesSection = document.querySelector('.messages-section');
+        messagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+
+        const nicknameInput = document.getElementById('nickname');
+        const contentInput = document.getElementById('content');
+        const nickname = nicknameInput.value.trim();
+        const content = contentInput.value.trim();
+
+        if (!nickname || !content) {
+            showToast('❌ 请填写完整信息', 'error');
+            return false;
+        }
+
+        if (nickname.length < 2) {
+            showToast('❌ 昵称至少需要2个字符', 'error');
+            return false;
+        }
+
+        if (content.length < 5) {
+            showToast('❌ 留言内容至少需要5个字符', 'error');
+            return false;
+        }
+
+        const bannedInNickname = checkBannedWords(nickname);
+        const bannedInContent = checkBannedWords(content);
+
+        if (bannedInNickname.length > 0 || bannedInContent.length > 0) {
+            showToast(`⚠️ 检测到敏感词：${[...bannedInNickname, ...bannedInContent].join('、')}`, 'error');
+            return false;
+        }
+
+        // 🛡️ 安全防护 - 注入检测和XSS防护
+        const nicknameSecurity = securityCheck(nickname);
+        const contentSecurity = securityCheck(content);
+
+        if (!nicknameSecurity.safe) {
+            showToast(`🚫 安全警告：昵称包含${nicknameSecurity.reason}`, 'error');
+            return false;
+        }
+
+        if (!contentSecurity.safe) {
+            showToast(`🚫 安全警告：内容包含${contentSecurity.reason}`, 'error');
+            return false;
+        }
+
+        // 对输入进行深度清理
+        const safeNickname = sanitizeInput(nickname);
+        const safeContent = sanitizeInput(content);
+
+        try {
+            // 使用API提交留言
+            const result = await window.API.Message.create(safeNickname, safeContent);
+
+            
+            if (result.success) {
+                nicknameInput.value = '';
+                contentInput.value = '';
+                
+                currentPage = 1;
+                await renderMessages();
+                showToast('✅ 留言发布成功！等待管理员审核后即可显示', 'success');
+            } else {
+                showToast(`❌ ${result.error || '发布失败'}`, 'error');
+            }
+        } catch (error) {
+            console.error('提交留言失败:', error);
+            showToast('❌ 网络错误，请稍后重试', 'error');
+        }
+
+        return false;
+    }
+
+    window.onload = function() {
+        renderMessages();
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>昆虫的环保贡献 - 守护自然的微小英雄</title>
+    <link rel="icon" href="ing/icu.png" type="image/png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            line-height: 1.8;
+            color: #2d5016;
+            background: linear-gradient(135deg, #f0f9e8 0%, #e8f5e0 100%);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background: rgba(45, 80, 22, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .nav-logo {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .nav-links a.active {
+            background: rgba(139, 195, 74, 0.3);
+            color: white;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            color: white;
+            padding: 70px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🌍 ♻️ 🐝 🦋 🌱 🌿 💚';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            letter-spacing: 22px;
+            opacity: 0.6;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.25em;
+            max-width: 750px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2em;
+            color: #2d5016;
+            margin-bottom: 18px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.08em;
+            max-width: 750px;
+            margin: 0 auto 45px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #4a7c23, #8bc34a);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* 经济价值统计 */
+        .value-section {
+            background: white;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .value-card {
+            background: linear-gradient(135deg, #f8fdf4 0%, #e8f5e0 100%);
+            border-radius: 16px;
+            padding: 32px 26px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(74, 124, 35, 0.12);
+            transition: all 0.3s ease;
+            border-top: 5px solid #4a7c23;
+        }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(74, 124, 35, 0.2);
+        }
+
+        .value-icon {
+            font-size: 3.2em;
+            margin-bottom: 15px;
+        }
+
+        .value-number {
+            font-size: 2.4em;
+            font-weight: bold;
+            color: #4a7c23;
+            margin-bottom: 8px;
+        }
+
+        .value-label {
+            color: #555;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+        /* 贡献详情 */
+        .contribution-section {
+            background: linear-gradient(180deg, #ffffff 0%, #f8fdf4 100%);
+        }
+
+        .contribution-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contribution-item {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .contribution-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(74, 124, 35, 0.18);
+        }
+
+        .item-header {
+            background: linear-gradient(135deg, #4a7c23 0%, #5d9c2f 100%);
+            color: white;
+            padding: 24px 26px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .item-icon {
+            font-size: 2.2em;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .item-header h3 {
+            font-size: 1.35em;
+        }
+
+        .item-body {
+            padding: 24px 26px;
+        }
+
+        .item-body p {
+            color: #555;
+            margin-bottom: 14px;
+            font-size: 0.98em;
+        }
+
+        .highlight-stat {
+            background: #e8f5e0;
+            padding: 14px 18px;
+            border-radius: 10px;
+            border-left: 4px solid #4a7c23;
+            margin: 14px 0;
+        }
+
+        .highlight-stat strong {
+            color: #2d5016;
+            font-size: 1.1em;
+        }
+
+        .example-list {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .example-list li {
+            padding: 9px 0;
+            padding-left: 24px;
+            position: relative;
+            color: #444;
+            font-size: 0.96em;
+        }
+
+        .example-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4a7c23;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* 数据可视化 */
+        .data-section {
+            background: #2d5016;
+            color: white;
+        }
+
+        .data-section .section-title {
+            color: white;
+        }
+
+        .data-section .section-subtitle {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .data-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 30px 26px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .data-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.03);
+        }
+
+        .data-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #aed581;
+            margin-bottom: 10px;
+        }
+
+        .data-label {
+            font-size: 1.05em;
+            opacity: 0.92;
+            line-height: 1.5;
+        }
+
+        /* 案例研究 */
+        .case-section {
+            background: white;
+        }
+
+        .case-study {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-top: 40px;
+            background: linear-gradient(135deg, #fff9e8 0%, #fff3cd 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+        }
+
+        .case-image {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .case-image img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .case-content h3 {
+            color: #e65100;
+            font-size: 1.6em;
+            margin-bottom: 18px;
+        }
+
+        .case-content p {
+            color: #555;
+            margin-bottom: 14px;
+            font-size: 1em;
+        }
+
+        .case-result {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 12px;
+            border-left: 5px solid #ff9800;
+            margin-top: 18px;
+        }
+
+        .case-result strong {
+            color: #e65100;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1.05em;
+        }
+
+        /* 行动号召 */
+        .action-section {
+            background: linear-gradient(135deg, #e8f5e0 0%, #c8e6c9 100%);
+            text-align: center;
+        }
+
+        .action-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px 26px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(74, 124, 35, 0.18);
+        }
+
+        .action-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            color: #2d5016;
+            font-size: 1.25em;
+            margin-bottom: 12px;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.96em;
+        }
+
+        footer {
+            background: #1b3a0d;
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        footer p {
+            opacity: 0.88;
+            font-size: 1em;
+        }
+
+        /* 动画效果 */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-scale.animated {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        @media (max-width: 1024px) {
+            .value-grid { grid-template-columns: repeat(2, 1fr); }
+            .case-study { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: flex; }
+            
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(45, 80, 22, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 10px;
+                animation: slideDown 0.3s ease;
+            }
+
+            .nav-links.active { display: flex; }
+            .nav-links a { padding: 15px 20px; font-size: 1.1em; }
+
+            header { padding: 50px 0 40px; }
+            header h1 { font-size: 1.8em; }
+            header::before { display: none; }
+            header p { font-size: 1em; padding: 0 20px; }
+
+            .section-title { font-size: 1.6em; }
+            .value-grid { grid-template-columns: 1fr; }
+            .contribution-list { grid-template-columns: 1fr; }
+            .data-grid { grid-template-columns: 1fr; }
+            .action-cards { grid-template-columns: 1fr; }
+            .case-study { padding: 25px; }
+            .case-image img { height: 250px; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="index.html" class="nav-logo">🌿 昆虫与环保</a>
+        <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">🏠 首页</a></li>
+            <li><a href="museum.html">🏛️ 昆虫博物馆</a></li>
+            <li><a href="contribution.html" class="active">♻️ 环保贡献</a></li>
+            <li><a href="guestbook.html">💬 留言板</a></li>
+        </ul>
+    </div>
+</nav>
+
+<header class="animate-on-scroll">
+    <div class="container">
+        <h1>♻️ 昆虫的环保贡献</h1>
+        <p>探索这些微小生命如何守护地球生态、维持环境平衡，以及它们为人类提供的不可替代的生态服务价值</p>
+    </div>
+</header>
+
+<!-- 经济价值统计 -->
+<section class="value-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">💰 昆虫的生态服务价值</h2>
+        <p class="section-subtitle">昆虫每年为全球生态系统提供数千亿美元的价值服务，是地球上最重要的生态工程师之一</p>
+        
+        <div class="value-grid">
+            <div class="value-card">
+                <div class="value-icon">🌸</div>
+                <div class="value-number">$577亿</div>
+                <div class="value-label">全球授粉服务的年经济价值<br>（仅农作物）</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🗑️</div>
+                <div class="value-number">$570亿</div>
+                <div class="value-label">分解者每年处理有机废弃物的价值<br>（美国）</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🛡️</div>
+                <div class="value-number">$450亿</div>
+                <div class="value-label">生物防治节省的农药成本<br>（全球估算）</div>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🍯</div>
+                <div class="value-number">$90亿</div>
+                <div class="value-label">养蜂业及相关产品的年产值<br>（全球）</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 核心贡献详解 -->
+<section class="contribution-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">🎯 昆虫对环保的核心贡献</h2>
+        <p class="section-subtitle">从微观到宏观，昆虫在环境保护中扮演着不可或缺的角色</p>
+        
+        <div class="contribution-list">
+            <div class="contribution-item">
+                <div class="item-header">
+                    <div class="item-icon">🌸</div>
+                    <h3>植物授粉 - 维持生物多样性的基石</h3>
+                </div>
+                <div class="item-body">
+                    <p>约<strong style="color:#4a7c23">87.5%</strong>的开花植物依赖动物传粉，其中大部分由昆虫完成。没有昆虫授粉，全球粮食产量将下降35%-75%。</p>
+                    
+                    <div class="highlight-stat">
+                        <strong>关键数据：</strong>一只蜜蜂一生可访问5000+朵花，飞行距离超过600公里
+                    </div>
+                    
+                    <ul class="example-list">
+                        <li>保障全球75%以上粮食作物的繁殖</li>
+                        <li>维持野生植物种群和森林更新</li>
+                        <li>促进基因多样性，增强植物抗逆性</li>
+                        <li>支撑整个陆地食物链的基础环节</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="item-header">
+                    <div class="item-icon">🔄</div>
+                    <h3>物质循环 - 大自然的高效回收站</h3>
+                </div>
+                <div class="item-body">
+                    <p>昆虫分解者是地球清洁系统的核心成员，每年处理数十亿吨动植物残骸，将有机物转化为土壤养分。</p>
+                    
+                    <div class="highlight-stat">
+                        <strong>关键数据：</strong>蜣螂（屎壳郎）每年为美国畜牧业节省约$3.8亿美元的粪便清理费用
+                    </div>
+                    
+                    <ul class="example-list">
+                        <li>加速枯枝落叶和动物尸体的分解</li>
+                        <li>将有机物转化为土壤可吸收的营养</li>
+                        <li>减少温室气体排放（甲烷）</li>
+                        <li>改善土壤结构和透气性</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="item-header">
+                    <div class="item-icon">⚖️</div>
+                    <h3>生态平衡 - 天然的害虫控制专家</h3>
+                </div>
+                <div class="item-body">
+                    <p>捕食性和寄生性昆虫是农业生态系统中最有效的生物防治力量，能够精准控制害虫种群数量而不污染环境。</p>
+                    
+                    <div class="highlight-stat">
+                        <strong>关键数据：</strong>一只瓢虫在其生命周期内可吃掉多达5000只蚜虫，相当于保护了数百株作物
+                    </div>
+                    
+                    <ul class="example-list">
+                        <li>减少化学农药使用量达60-80%</li>
+                        <li>避免农药残留和环境污染问题</li>
+                        <li>保护益虫和其他非目标生物</li>
+                        <li>长期可持续的生态平衡维护</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="item-header">
+                    <div class="item-icon">🔬</div>
+                    <h3>科学研究 - 人类进步的灵感源泉</h3>
+                </div>
+                <div class="item-body">
+                    <p>昆虫为医学、工程、材料科学等领域提供了无数创新灵感，推动着科技进步和可持续发展。</p>
+                    
+                    <div class="highlight-stat">
+                        <strong>关键数据：</strong>超过70%的诺贝尔生理学/医学奖研究与昆虫或昆虫相关模型有关
+                    </div>
+                    
+                    <ul class="example-list">
+                        <li>果蝇：遗传学和发育生物学研究模式生物</li>
+                        <li>仿生学：蜂巢结构启发建筑节能设计</li>
+                        <li>医学：蚂蚁毒液用于关节炎治疗研究</li>
+                        <li>材料学：甲虫外壳启发了新型轻质高强度材料</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="item-header">
+                    <div class="item-icon">💧</div>
+                    <h3>水质净化 - 水生生态系统的守护者</h3>
+                </div>
+                <div class="item-body">
+                    <p>水生昆虫不仅是水质监测的重要指标，还直接参与水体净化过程，维持淡水生态系统的健康运转。</p>
+                    
+                    <div class="highlight-stat">
+                        <strong>关键数据：</strong>蜉蝣幼虫的存在表明水质达到I类标准（极优水质）
+                    </div>
+                    
+                    <ul class="example-list">
+                        <li>作为水质污染的生物指示器</li>
+                        <li>消耗藻类和有机碎屑防止水体富营养化</li>
+                        <li>作为鱼类和水鸟的食物来源</li>
+                        <li>参与水体营养物质的循环利用</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="contribution-item">
+                <div class="item-header">
+                    <div class="item-icon">🌍</div>
+                    <h3>气候调节 - 碳循环的关键参与者</h3>
+                </div>
+                <div class="item-body">
+                    <p>昆虫通过影响植被生长、土壤碳储存和甲烷排放等途径，在全球气候调节中发挥着重要作用。</p>
+                    
+                    <div class="highlight-stat">
+                        <strong>关键数据：</strong>白蚁每年处理的木质纤维素相当于全球碳排放量的2-4%
+                    </div>
+                    
+                    <ul class="example-list">
+                        <li>通过授粉促进植物固碳能力</li>
+                        <li>加速土壤有机质的分解与转化</li>
+                        <li>调节温室气体（CO₂、CH₄）的排放</li>
+                        <li>影响森林火灾风险（清理易燃物）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 关键数据展示 -->
+<section class="data-section animate-scale">
+    <div class="container">
+        <h2 class="section-title">📊 昆虫环保影响力的关键数据</h2>
+        <p class="section-subtitle">用数字说话，感受微小生命的巨大能量</p>
+        
+        <div class="data-grid">
+            <div class="data-card">
+                <div class="data-value">200,000+</div>
+                <div class="data-label">依赖昆虫授粉的<br>植物物种数量</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">35%</div>
+                <div class="data-label">全球粮食产量<br>依赖昆虫授粉的比例</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">1.4万亿</div>
+                <div class="data-label">全球蜜蜂每年的<br>授粉工作次数</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">58吨</div>
+                <div class="data-label">一英亩健康土壤中<br>昆虫生物量的估算值</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">76%</div>
+                <div class="data-label">全球食物供应<br>依赖昆虫的程度</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">$4,000亿+</div>
+                <div class="data-label">昆虫提供的<br>年度总生态服务价值</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 成功案例 -->
+<section class="case-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">🏆 保护昆虫的成功案例</h2>
+        <p class="section-subtitle">世界各地正在积极行动，保护这些珍贵的生态卫士</p>
+        
+        <div class="case-study">
+            <div class="case-image">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&h=400&fit=crop" alt="蜜蜂保护区">
+            </div>
+            <div class="case-content">
+                <h3>🇪🇺 欧洲"蜜蜂友好城市"计划</h3>
+                <p>欧盟自2018年启动的倡议，鼓励城市创建适合蜜蜂生存的环境。目前已有超过150个城市参与该计划。</p>
+                <p>主要措施包括：</p>
+                <ul class="example-list">
+                    <li>在城市公园种植本土花卉带</li>
+                    <li>禁止在公共区域使用有害农药</li>
+                    <li>建立城市屋顶花园和绿色走廊</li>
+                    <li>教育公众认识蜜蜂的重要性</li>
+                </ul>
+                
+                <div class="case-result">
+                    <strong>✅ 取得成果：</strong>
+                    参与城市的野生蜜蜂数量平均增加了40%，城市生物多样性显著提升，居民环保意识大幅提高。
+                </div>
+            </div>
+        </div>
+
+        <div class="case-study" style="margin-top: 35px;">
+            <div class="case-content">
+                <h3>🇨🇳 中国云南哈尼梯田的生态农业模式</h3>
+                <p>云南省红河州哈尼族传统梯田农业系统，巧妙利用鸭子、鱼类和昆虫共同构建了可持续的稻田生态系统。</p>
+                <p>系统特点：</p>
+                <ul class="example-list">
+                    <li>稻鸭共作：鸭子吃掉害虫和杂草</li>
+                    <li>稻鱼共生：鱼类控制蚊虫幼虫</li>
+                    <li>保留田埂杂草：为天敌昆虫提供栖息地</li>
+                    <li>完全不使用化学农药和化肥</li>
+                </ul>
+                
+                <div class="case-result">
+                    <strong>✅ 取得成果：</strong>
+                    该地区被联合国粮农组织认定为"全球重要农业文化遗产"，水稻品质优异，农民收入稳定增长，生态环境持续改善。
+                </div>
+            </div>
+            <div class="case-image">
+                <img src="https://images.unsplash.com/photo-1591027273323-3f84b8f8b41b?w=700&h=400&fit=crop" alt="生态农业">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 行动号召 -->
+<section class="action-section animate-on-scroll">
+    <div class="container">
+        <h2 class="section-title">🤝 我们每个人都能做的贡献</h2>
+        <p class="section-subtitle">保护昆虫就是保护我们自己的未来，从小事做起，从今天开始</p>
+        
+        <div class="action-cards">
+            <div class="action-card">
+                <div class="action-icon">🌻</div>
+                <h3>打造昆虫友好花园</h3>
+                <p>种植本土开花植物，选择不同花期确保全年有花蜜供应。避免单一草坪，保留一些"野草区"作为昆虫栖息地。</p>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">🚫</div>
+                <h3>拒绝有害化学品</h3>
+                <p>优先选择有机产品，家庭园艺使用天然驱虫方法（如肥皂水、辣椒水）。支持不使用农药的农业生产方式。</p>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">🏠</div>
+                <h3>提供昆虫庇护所</h3>
+                <p>制作简易昆虫旅馆，保留庭院中的枯枝落叶堆和小土堆。冬季不要过度清理花园，让昆虫有越冬场所。</p>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">💡</div>
+                <h3>传播环保理念</h3>
+                <p>向家人朋友分享昆虫的知识和重要性。带孩子观察昆虫，培养下一代的环保意识。在社交媒体上发声倡导保护。</p>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">📊</div>
+                <h3>参与公民科学项目</h3>
+                <p>加入蝴蝶计数、萤火虫观测等公民科学项目。记录身边的昆虫变化，帮助科学家更好地了解和保护它们。</p>
+            </div>
+            <div class="action-card">
+                <div class="action-icon">🛒</div>
+                <h3>用消费投票</h3>
+                <p>购买有机认证食品，支持蜜蜂友好认证的产品。选择环保包装，减少塑料污染对海洋和陆生昆虫的伤害。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>♻️ 昆虫的环保贡献 | 微小生命，伟大使命</p>
+        <p style="margin-top: 10px; font-size: 0.92em;">每一只昆虫都在为地球的未来努力工作，让我们一起守护它们</p>
+    </div>
+</footer>
+
+<script>
+    // 移动端菜单切换
+    function toggleMobileMenu() {
+        const btn = event.currentTarget;
+        const links = document.getElementById('navLinks');
+        
+        btn.classList.toggle('active');
+        links.classList.toggle('active');
+        document.body.style.overflow = links.classList.contains('active') ? 'hidden' : '';
+    }
+
+    // 点击导航链接关闭菜单
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                document.getElementById('navLinks').classList.remove('active');
+                document.querySelector('.mobile-menu-btn').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // 滚动进入动画
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.animate-on-scroll, .animate-scale').forEach(el => observer.observe(el));
+
+    // 导航栏滚动阴影
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        nav.style.boxShadow = (window.scrollY > 50) 
+            ? '0 4px 25px rgba(0,0,0,0.15)' 
+            : '0 2px 15px rgba(0,0,0,0.1)';
+    });
+</script>
+
+</body>
+</html>
